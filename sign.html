@@ -2,28 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>日历</title>
+    <title>签到</title>
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <link href="css/reset.css" type="text/css" rel="stylesheet">
-    <link href="css/index.css" type="text/css" rel="stylesheet">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="description" content="">
+    <link href="../assets/css/reset.css" type="text/css" rel="stylesheet">
+    <link href="../assets/css/index.css" type="text/css" rel="stylesheet">
 </head>
-<body>
+<body id="app">
 <section class="sign_content cWhite">
-    <p><strong style="font-size: 30px">12</strong>天</p>
+    <p><strong style="font-size: 30px">{{signDatail.continualSignInDays}}</strong>天</p>
     <p class="f12px sign_item">连续签到</p>
-    <p>再签到3天，可获得更多商品哦~</p>
-    <a href="javascript:" class="sign_btn">签到</a>
+    <p v-if="targetDays-signDatail.continualSignInDays>0">再签到{{targetDays-signDatail.continualSignInDays}}天,可获得更多免费商品~</p>
+    <a href="javascript:" class="sign_btn" @click="signIn();" v-bind:class="{'cRed':isSign,'cText9':!isSign,}"><i class="qiandao_icon qiaodao_state" v-bind:class="{'qiaodao_state':isSign,'yiqiao_state':!isSign,}"></i>{{isSign?"签到":"已签"}}</a>
+</section>
+<p style="padding: 8px 12px;color: #666;font-size: 12px" v-if="endCount>0 && endCount<=6">签到送商品活动还有{{endCount}}天结束</p>
+<section class="qitian_zengpin" v-if="signDatail.ruleList.length == 1">
+    <img :src="signDatail.ruleList[0].imgUrl">
+    <div class="qitian_content">
+        <p class="cText3 mb12">{{signDatail.ruleList[0].giftDescribe}}</p>
+        <p class="cText6" v-if="signDatail">连续签到{{signDatail.ruleList[0].signInDay}}天可获得</p>
+    </div>
+</section>
+<section class="sign_product_box" v-else>
+    <div v-for="item in signDatail.ruleList">
+        <div class="sign_product_img_box santian_icon">
+            <img :src="item.imgUrl">
+            <span class="sign_tianshu">{{item.signInDay}}天</span>
+            <div v-if="item.alreadyGive" class="mask_layer"></div>
+            <span v-if="item.alreadyGive" class="cWhite yizengsong_text">已赠送</span>
+        </div>
+        <p>{{item.giftDescribe}}</p>
+    </div>
+    <!--<div>-->
+        <!--<div class="sign_product_img_box shiwutian_icon"></div>-->
+        <!--<p>脉动功能饮料600ml散装<span class="cText6">1瓶</span></p>-->
+    <!--</div>-->
+    <!--<div>-->
+        <!--<div class="sign_product_img_box sanshitian_icon"></div>-->
+        <!--<p>脉动功能饮料600ml散装<span class="cText6">1瓶</span></p>-->
+    <!--</div>-->
 </section>
 <div id="calendar">
     <div class="month">
         <ul>
-            <li class="arrow" @click="pickPre(currentYear,currentMonth)">❮</li>
-            <li class="year-month" @click="pickYear(currentYear,currentMonth)">
-                <span class="choose-year">{{ currentYear }}</span>
-                <span class="choose-month">{{ currentMonth }}月</span>
+            <li class="arrow" @click="pickPre(currentYear,currentMonth)"></li>
+            <li class="year-month">
+                <span>{{ currentYear }}年</span>
+                <span>{{ currentMonth }}月</span>
             </li>
-            <li class="arrow" @click="pickNext(currentYear,currentMonth)">❯</li>
+            <li class="arrow arrow_right" @click="pickNext(currentYear,currentMonth)"></li>
         </ul>
     </div>
     <ul class="weekdays">
@@ -36,32 +67,86 @@
         <li>六</li>
     </ul>
     <ul class="days">
-        <li @click="pick(day)" v-for="day in days">
-            <!--今天-->
-            <span v-if="day.getMonth()+1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
+        <li v-for="day in days">
+            <!---->
+            <span v-if="day.theTime.getMonth()+1 != currentMonth" class="other-month">{{ day.theTime.getDate() }}</span>
             <span v-else>
-   <!--今天-->
-                    <span v-if="day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate()"
-                        class="active">{{ day.getDate() }}</span>
-                    <span v-else>{{ day.getDate() }}</span>
+                    <span v-bind:class="{'gou_icon':day.isSign}">
+                    	{{ day.theTime.getDate() }}</span>
+                <!--今天-->
+                     <!--<span v-else v-bind:class ="{'gou_icon':this.firstSign.getFullYear()<=day.getFullYear() && day.getMonth() >=this.firstSign.getMonth() && day.getDate()>=this.firstSign.getDate() &&
+                    	day.getFullYear() <= new Date().getFullYear() && day.getMonth() <= new Date().getMonth() && day.getDate() <= new Date().getDate()}">{{ day.getDate() }}</span>-->
+                <span class="qitian_target" v-if="day.targetCount>0">{{day.targetCount}}天送</span>
             </span>
+
         </li>
     </ul>
 </div>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js" type="text/javascript"
-        charset="utf-8"></script>
+<section class="sign_tishi ctext6">
+    <p class="mb16 text_bold">温馨提示</p>
+    <p class="mb16" style="line-height: 1.6;" v-html="signDatail.ruleDescribe"></p>
+   <!-- <p class="mb16">2、一天只能签到一次。</p>
+    <p class="mb16">3、有一天漏签时，连续签到时间将清零。</p>-->
+</section>
+<div class="modal_lingquan" v-if="modalShow">
+    <div class="modal_lingquan_header">
+        <i class="clear_icon" @click="modalShow=!modalShow"></i>
+        <p class="mb12">签到成功</p>
+        <p>恭喜您获得一张赠品券</p>
+    </div>
+    <div class="modal_lingquan_content">
+        <p class="mb8">连续签到成功，已获得一张赠品券</p>
+        <p>可在<span class="cRed">"我——优惠券"</span>中找到哦！</p>
+    </div>
+    <div class="modal_lingquan_footer">
+        <a href="javascript:" @click="modalShow=!modalShow;location.reload()">我知道了！</a>
+    </div>
+</div>
+<div class="modal_mask_layer" v-if="modalShow" @click="modalShow=!modalShow"></div>
+<div class="modal_toast" v-if="toastShow">
+    <i class="toast_icon mb12"></i>
+    <p>签到成功</p>
+</div>
+<script src="../assets/vue.min.js" type="text/javascript"></script>
+<script src="../assets/vue-resource.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null){
+            return  unescape(r[2]);
+        }
+        return null;
+    }
+    //获取签到详情接口
+    var signDatailUrl ="/getUserSignInDetail";
+    //签到接口
+    var signUrl = "/userSignIn"
     new Vue({
-        el: '#calendar',
+        el: '#app',
         data: {
             currentDay: 1,
             currentMonth: 1,
             currentYear: 1970,
             currentWeek: 1,
-            days: []
+            days: [],
+            cityId: GetQueryString("cityId"),
+            userClassId: GetQueryString("userClassId"),
+            userId: GetQueryString("userId"),
+            signDatail: {},
+            toastShow: false,
+            modalShow: false,
+            isSign: true,
+            targetDays: 0,
+            lingquanDays : [],
+            firstSign:"",
+            endCount: 0,
+            serviceTime: ''
         },
         created: function () {
-            this.initData(null);
+            /* this.initData(null); */
+            this.initSignDatail();
         },
         methods: {
             initData: function (cur) {
@@ -69,7 +154,7 @@
                 if (cur) {
                     date = new Date(cur);
                 } else {
-                    date = new Date();
+                    date = new Date(this.serviceTime);
                 }
                 this.currentDay = date.getDate();
                 this.currentYear = date.getFullYear();
@@ -123,28 +208,47 @@
                 var lastDay = this.formatDate(this.currentYear, this.currentMonth, this.monthDays);
                 var l = new Date(lastDay);
                 this.lastWeek = l.getDay();
-                console.log("today:" + str + "," + this.currentWeek);
                 this.days.length = 0;
                 // 今天是周日，放在第一行第7个位置，前面6个
                 for (var i = this.firstWeek; i > 0; i--) {
+                    var o = {};
                     var d = new Date(firstDay);
                     d.setDate(d.getDate() - i);
-                    console.log("y:" + d.getDate());
-                    this.days.push(d);
+                    o.theTime = d;
+                    if (this.lingquanDays&&this.lingquanDays.length>0){
+                        this.isTarget(o);
+                    }
+                    if (this.signDatail&&this.signDatail.continualSignInDays>0){
+                        this.isSignDay(o);
+                    }
+                    this.days.push(o);
                 }
                 for (var i = 0; i < this.monthDays; i++) {
+                    var o = {}
                     var d = new Date(firstDay);
                     d.setDate(d.getDate() + i);
-                    this.days.push(d);
+                    o.theTime = d;
+                    if (this.lingquanDays&&this.lingquanDays.length>0){
+                        this.isTarget(o);
+                    }
+                    if (this.signDatail&&this.signDatail.continualSignInDays>0){
+                        this.isSignDay(o);
+                    }
+                    this.days.push(o);
                 }
                 for (var i = 1; i <= 6 - this.lastWeek; i++) {
+                    var o = {};
                     var d = new Date(lastDay);
                     d.setDate(d.getDate() + i);
-                    this.days.push(d);
+                    o.theTime =d;
+                    if (this.lingquanDays&&this.lingquanDays.length>0){
+                        this.isTarget(o);
+                    }
+                    if (this.signDatail&&this.signDatail.continualSignInDays>0){
+                        this.isSignDay(o);
+                    }
+                    this.days.push(o);
                 }
-            },
-            pick: function (date) {
-                alert(this.formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
             },
             pickPre: function (year, month) {
                 // setDate(0); 上月最后一天
@@ -159,10 +263,6 @@
                 d.setDate(35);
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
             },
-            pickYear: function (year, month) {
-                alert(year + "," + month);
-            },
-
             // 返回 类似 2016-01-02 格式的字符串
             formatDate: function (year, month, day) {
                 var y = year;
@@ -172,7 +272,147 @@
                 if (d < 10) d = "0" + d;
                 return y + "-" + m + "-" + d
             },
+            initSignDatail: function() {
+                this.$http.get(signDatailUrl,{
+                	params: {
+                		cityId: this.cityId,
+                        userClassId: this.userClassId,
+                        userId: this.userId
+                	}
+                }).then(function(data){
+                    if (data.body.success){
+                        this.signDatail = data.body.data;
+                        this.serviceTime =data.body.serviceTime.split(" ")[0]
+                        if (this.signDatail.alreadySignInTimes && this.signDatail.alreadySignInTimes.length>0) {
+                            for (var i=0; i<this.signDatail.alreadySignInTimes.length;i++){
+                                this.signDatail.alreadySignInTimes[i] = this.signDatail.alreadySignInTimes[i].split(" ")[0];
+                            }
+                        }
+                        this.signDatail.alreadySignInTimes = this.signDatail.alreadySignInTimes.filter(function(val,index,array){
+                            return array.indexOf(val)===index;
+                        })
+                        //判断今天是否可以签到
+                        if(this.signDatail.alreadySignInTimes && this.signDatail.alreadySignInTimes.length>0){
+                            var lastSign = this.signDatail.alreadySignInTimes[0];
+                          /*  var d = new Date();
+                            var today =this.formatDate(d.getFullYear(), d.getMonth()+1, d.getDate());*/
+                            if (lastSign== this.serviceTime){
+                                this.isSign = false;
+                            }
+                        }
+                        //确定最近的签到目标
+                        if (this.signDatail.ruleList && this.signDatail.ruleList.length>0) {
+                            var d =this.signDatail.continualSignInDays;
+                            for(var i=0; i<this.signDatail.ruleList.length; i++){
+                                if(d < this.signDatail.ruleList[i].signInDay){
+                                    this.targetDays = this.signDatail.ruleList[i].signInDay;
+                                    break;
+                                }
+                            }
+                        }
+                        //计算可以领券的日期
+                        if (this.signDatail.ruleList && this.signDatail.ruleList.length>0) {
+                            var a = this.signDatail.continualSignInDays;
+                            var b = this.signDatail.alreadySignInTimes.length;
+                            this.qiandaoDays = this.signDatail.alreadySignInTimes.splice(b-a,a);//有效的签到时间
+                            if(this.signDatail.continualSignInDays>0){
+                                this.firstSign = new Date(this.qiandaoDays[this.qiandaoDays.length-1])
+                                var firstSign = this.qiandaoDays[this.qiandaoDays.length-1];
+                            }else {
+                                this.firstSign = new Date(this.serviceTime);
+                            }
+
+                            for (var i=0; i<this.signDatail.ruleList.length; i++){
+                                var d;
+                                if (!firstSign){
+                                    d = new Date(this.serviceTime)
+                                }else {
+                                    d = new Date(firstSign);
+                                }
+
+                                d.setDate(d.getDate()+this.signDatail.ruleList[i].signInDay-1);
+                                this.lingquanDays.push(d);
+                            }
+                        }
+                        //活动结束的天数
+                        var endTime = this.signDatail.endTime.split(" ")[0];
+                        endTime = new Date(endTime);
+                        var nowTime = new Date(this.serviceTime);
+                        this.endCount = (Math.abs(endTime - nowTime))/1000/60/60/24;
+                        this.endCount = Math.ceil(this.endCount);
+                        this.initData(null);
+                    }
+                })               
+            },
+            signIn: function() {
+            	if(!this.isSign){
+            		return;
+            	}
+            	this.$http.get(signUrl,{
+            		params: {
+            			cityId: this.cityId,
+            			userId: this.userId,
+            			data: this.signDatail.signInId
+            		}
+            	}).then(function(data){
+            		if(data.body.success){
+            			this.isSign = false;
+                        var t = data.body.serviceTime.split(" ")[0];
+                        var d = new Date(t);
+                        if (this.isModal(d)){
+                            this.modalShow = true;
+                        }else {
+                            this.toastShow = true;
+                            setTimeout(function(){
+                            	location.reload();
+                            },1000)
+                        }
+//            			this.initSignDatail();
+            		}
+            	})
+            },
+            isModal: function(date){
+                var d = this.formatDate(date.getFullYear(),date.getMonth()+1,date.getDate());
+                for (var i =0; i<this.lingquanDays.length; i++) {
+                    var b = this.formatDate(this.lingquanDays[i].getFullYear(),this.lingquanDays[i].getMonth()+1,this.lingquanDays[i].getDate());
+                    if (d == b){
+                        return true;
+                    }
+                }
+                return false;
+            },
+            isTarget: function(obj) {
+                var d = this.formatDate(obj.theTime.getFullYear(),obj.theTime.getMonth()+1,obj.theTime.getDate());
+                for (var i =0; i<this.lingquanDays.length; i++) {
+                    var b = this.formatDate(this.lingquanDays[i].getFullYear(),this.lingquanDays[i].getMonth()+1,this.lingquanDays[i].getDate());
+                    if (d == b){
+                        obj.targetCount = this.targetCount(this.lingquanDays[i]);
+                    }
+                }
+            },
+            targetCount: function (date) {
+                if (!this.firstSign){
+                    this.firstSign =new Date(this.serviceTime);
+                }
+                var dayCount = (Math.abs(date - this.firstSign))/1000/60/60/24 ;
+                dayCount = Math.ceil(dayCount);
+                return dayCount+1;
+            },
+            isSignDay: function(obj) {
+                if (this.signDatail.continualSignInDays>0) {
+//                    var a = this.signDatail.continualSignInDays;
+                    /*var b = this.signDatail.alreadySignInTimes.length;
+                    var qiandaoDays = this.signDatail.alreadySignInTimes.splice(b-a,a);//有效的签到时间*!/*/
+                    for (var i = 0;i<this.qiandaoDays.length; i++){
+                        var str = this.formatDate(obj.theTime.getFullYear(),obj.theTime.getMonth()+1,obj.theTime.getDate());
+                        if (str == this.qiandaoDays[i]){
+                            obj.isSign = true;
+                        }
+                    }
+                }
+            }
         },
     });
 </script>
 </body>
+</html>

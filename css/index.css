@@ -5,67 +5,69 @@ body {
 }
 
 #calendar {
-    width: 80%;
-    margin: 0 auto;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+   /* width: 100%;
+    margin: 0 auto;*/
+    /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.12); */
+    background: #fff;
+    padding: 0 12px;
 }
 
 .month {
     width: 100%;
-    background: #00B8EC;
+    background: #FFFFFF;
+    text-align: center;
 }
 
 .month ul {
     margin: 0;
     padding: 0;
+    display: inline-flex;
+    display: -webkit-flex;
     display: flex;
-    justify-content: space-between;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center
 }
 
 .year-month {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+    margin: 0 48px;
+    vertical-align: middle;
 }
-
-.year-month:hover {
-    background: rgba(150, 2, 12, 0.1);
-}
-
 .choose-year {
     padding-left: 20px;
     padding-right: 20px;
 }
-
-.choose-month {
-    text-align: center;
-    font-size: 1.5rem;
-}
-
 .arrow {
-    padding: 30px;
+    width: 16px;
+    height: 16px;
+    background-image: url("../img/rilizuojianyou_ic.png");
+    background-size: contain;
+    padding: 16px 0;
+    background-repeat: no-repeat;
+    background-position: 0 center;
 }
-
-.arrow:hover {
-    background: rgba(100, 2, 12, 0.1);
+.arrow_right {
+    /* transform: rotate(180deg); */
+    background-image: url("../img/riliyoujiantou_ic.png");
 }
 
 .month ul li {
-    color: white;
-    font-size: 20px;
+    color: #333333;
+    font-size: 15px;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    display: inline-block;
 }
 
 .weekdays {
     margin: 0;
     padding: 10px 0;
-    background-color: #00B8EC;
+    background-color: #FFFFFF;
     display: flex;
     flex-wrap: wrap;
-    color: #FFFFFF;
+    color: #666;
     justify-content: space-around;
+    font-size: 13px;
 }
 
 .weekdays li {
@@ -90,16 +92,11 @@ body {
     text-align: center;
     padding-bottom: 15px;
     padding-top: 15px;
-    font-size: 1rem;
-    color: #000;
+    font-size: 12px;
+    color: #333;
+    position: relative;
 }
 
-.days li .active {
-    padding: 6px 10px;
-    border-radius: 50%;
-    background: #00B8EC;
-    color: #fff;
-}
 
 .days li .other-month {
     padding: 5px;
@@ -119,17 +116,27 @@ body {
 .f12px {
     font-size: 12px;
 }
-
+.cRed {
+    color: #d91f2f;
+}
+.cText9 {
+	color: #999;
+}
 /*顶部*/
 .sign_content{
+    display:  -webkit-flex;
     display: flex;
+    -webkit-flex-direction: column;
     flex-direction: column;
+    -webkit-align-content: center;
+    -webkit-justify-content: center;
     justify-content: center;
     align-items: center;
     background:  url('../img/beijing.png'),linear-gradient(#d91f2f, #ed5918);
     background-size: 100%;
     padding: 20px 0 16px;
     position: relative;
+    text-align: center;
 }
 .sign_item {
     margin: 8px 0 16px;
@@ -142,8 +149,281 @@ body {
     line-height: 28px;
     border-radius: 14px 0 0 14px;
     background: #fff;
-    color: #d91f2f;
     top: 20px;
     right: 0;
     padding: 0 14px 0 12px;
+}
+.qiandao_icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    margin-right: 4px;
+    vertical-align: -2px;
+}
+.qiaodao_state {
+    background-image: url("../img/icon_qiandao.png");
+}
+.yiqiao_state {
+    background-image: url("../img/icon_yiqian.png");
+}
+.sign_product_box {
+    display: -webkit-flex;
+    display: flex;
+    padding: 12px 24px;
+    font-size: 12px;
+    /* justify-content: space-around; */
+    background: #FFFFFF;
+    margin-bottom: 8px;
+}
+.sign_product_box>div {
+    width: 96px;
+    margin-right: 8px;
+    display: inline-block;
+}
+.sign_product_box p {
+    word-break: break-all;
+    text-align: center;
+}
+.sign_product_img_box {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    background-image: url("../img/yuan_icon.png");
+    background-size: contain;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.sign_tianshu {
+    display: inline-block;
+    width: 32px;
+    height: 34px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: contain;
+    z-index: 2;
+    background-image: url("../img/jitianqiandao_icon.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #eb531b;
+}
+.sign_product_img_box img {
+    display: block;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+.mask_layer{
+    width: 77px;
+    height: 77px;
+    position: absolute;
+    background: rgba(0,0,0,0.4);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    z-index: 1;
+}
+.yizengsong_text {
+    font-weight: 700;
+    font-size: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+    word-break: keep-all;
+}
+.sign_tishi {
+    padding: 12px;
+    font-size: 12px;
+}
+.mb16{
+    margin-bottom: 16px;
+}
+.text_bold{
+    font-weight: 700;
+}
+/*只签到七天赠品券*/
+.qitian_zengpin {
+    display: flex;
+    justify-content: flex-start;
+    margin: 8px 0;
+    background-image: url("../img/zengpingquan_ic.png");
+    background-size: 100% 100%;
+    font-size: 12px;
+}
+.qitian_zengpin img {
+    display: block;
+    width: 76px;
+    height: 76px;
+}
+.qitian_zengpin .qitian_content {
+    padding: 12px;
+    margin-right: 80px;
+}
+.mb12 {
+    margin-bottom: 12px;
+}
+.mb8 {
+    margin-bottom: 8px;
+}
+/*签到*/
+.gou_icon:after{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 3px;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    -moz-transform: translate(-50%,0);
+    -ms-transform: translate(-50%,0);
+    -o-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+    transform: translate(-50%,0);
+    background-image: url("../img/icon_gou.png");
+    background-size: contain;
+}
+/*七天，十五天，30天送*/
+.qitian_target {
+    display: inline-block;
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    background-image: url("../img/icon_qiandaosonglihe.png");
+    top: 50%;
+    left: 50%;
+    z-index: 9;
+    -webkit-transform: translate(-50%,-50%) scale(0.5,0.5);
+    -moz-transform: translate(-50%,-50%) scale(0.5,0.5);
+    -ms-transform: translate(-50%,-50%) scale(0.5,0.5);
+    -o-transform: translate(-50%,-50%) scale(0.5,0.5);
+    transform: translate(-50%,-50%) scale(0.5,0.5);
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    padding-top: 36px;
+    font-size: 16px;
+    background-repeat: no-repeat;
+}
+/*领券弹窗*/
+.modal_lingquan {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99;
+    transform: translate(-50%,-50%);
+}
+.modal_lingquan .modal_lingquan_header {
+    width: 288px;
+    height: 206px;
+    background-image: url("../img/qiandaochenggong_pic.png");
+    background-size: contain;
+    position: relative;
+    display: inline-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    color: #fff;
+    padding-bottom: 16px;
+    line-height: 1;
+}
+.modal_lingquan_header .clear_icon {
+	width: 24px;
+    height: 24px;
+    display: block;
+    background-image: url("../img/ic_clear.png");
+    background-size: contain;
+    top: 12px;
+    right: 12px;
+    position: absolute;
+}
+.modal_lingquan .modal_lingquan_content {
+    padding: 16px;
+    font-size: 12px;
+    text-align: center;
+    color: #666;
+    background: #FFFFFF;
+}
+.modal_lingquan .modal_lingquan_footer {
+    display: flex;
+    height: 44px;
+    font-size: 17px;
+    background: #FFFFFF;
+    text-align: center;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+    line-height: 44px;
+}
+/* .modal_lingquan_footer:before {
+    position: absolute;
+    content: " ";
+    display: block;
+    z-index: 99;
+    height: 100%;
+    width: 1px;
+    border-left: 1px solid #C8C8CD;
+    top: 0;
+    left: 50%;
+    transform: scaleX(0.5);
+} */
+.modal_lingquan_footer:after{
+    position: absolute;
+    content: " ";
+    display: block;
+    /* z-index: 99; */
+    height: 1px;
+    width: 100%;
+    border-top: 1px solid #C8C8CD;
+    top: 0;
+    left: 0;
+    transform: scaleY(0.5);
+}
+.modal_lingquan_footer a {
+    flex: 1;
+    color: #333333;
+}
+.modal_mask_layer{
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 98;
+}
+.modal_toast {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0,0,0,0.4);
+    padding: 16px 24px;
+    text-align: center;
+    color: #FFFFFF;
+    font-size: 14px;
+    border-radius: 12px;
+}
+.modal_toast .toast_icon {
+    display: inline-block;
+    margin: 0 auto;
+    background-image: url("../img/icon_qiandaotoast.png");
+    width: 40px;
+    height: 40px;
+    background-size: contain;
 }
